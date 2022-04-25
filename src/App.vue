@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-      <CMPHeader/>
-      <DiscGrid/>
+      <CMPHeader
+      :passaGeneriProps="generi"
+      @inviaGenereSel="ottieniGenereSel"/>
+      <DiscGrid
+      @generiPronti="ottieniGeneri"
+      :passaGenSelProps="genereSelezionato"/>
   </div>
 </template>
 
@@ -15,6 +19,20 @@ export default {
   components: {
     CMPHeader,
     DiscGrid
+  },
+  data(){
+    return{
+      generi: [],
+      genereSelezionato: ''
+    }
+  },
+  methods:{
+    ottieniGeneri(mieiGeneri){
+      this.generi = mieiGeneri
+    },
+    ottieniGenereSel(genSel){
+      this.genereSelezionato = genSel
+    }
   }
 }
 </script>

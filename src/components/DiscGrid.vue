@@ -1,9 +1,8 @@
 <template>
     <div class="container-fluid py-5">
         <div class="row row-cols-5 text-white g-2">
-            <CardDisco v-for="(element, index) in dischi" 
-            :key="index" :poster="element.poster" :title="element.title" :author="element.author" :year="element.year"
-            />
+            <CardDisco v-for="(element, index) in filteredDisc" 
+            :key="index" :card="element"/>
         </div>
     </div>
   
@@ -19,21 +18,43 @@ export default {
   components: {
       CardDisco 
   },
+  props:{
+      passaGenSelProps: String
+  },
+  computed:{
+      filteredDisc(){
+          if(this.passaGenSelProps == ''){
+              return this.dischi
+          } else {
+              return this.dischi.filter( (el) => {
+                  return el.genre.includes(this.passaGenSelProps)
+              })
+          }
+      }
+  },
   data(){
       return{
-          dischi: []
+          dischi: [],
+          generi: []
       }
   },
   created(){
       axios.get('https://flynn.boolean.careers/exercises/api/array/music')
       .then( (res) => {
           this.dischi = res.data.response
+
+          this.dischi.forEach( (element) => {
+              if (!this.generi.includes(element.genre))
+              this.generi.push(element.genre)
+
+          this.$emit('generiPronti', this.generi)    
+          })
       })
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped lang="scss">
 
 </style>
